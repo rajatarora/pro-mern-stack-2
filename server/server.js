@@ -1,5 +1,5 @@
 /*
-
+This is a simple Express server that serves static files present in the public folder on port 3000.
  */
 
 const express = require('express');
