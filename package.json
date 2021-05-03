@@ -1,0 +1,30 @@
+{
+  "name": "pro-mern-stack-2",
+  "version": "1.0.0",
+  "description": "Mern Stack Study",
+  "main": "index.js",
+  "scripts": {
+    "compile": "babel src --out-dir public",
+    "start": "nodemon -w server server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "babel src --out-dir public --watch --verbose"
+  },
+  "scriptsComments": {
+    "compile": "Compiles all JSX files present in src folder into JS files to public folder. Config is taken from .babelrc in the src folder. Each source folder can have its own .babelrc.",
+    "start": "Uses nodemon to watch changes in server folder, and whenever a change is detected, reruns server.js",
+    "watch": "Watches for JSX changes in src folder, and transforms them into JS whenever they happen",
+    "running": "To run this solution, you need two terminal windows - one for `npm run watch` and one for `npm start`"
+  },
+  "author": "Rajat Arora",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^1.19.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.16",
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.0",
+    "@babel/preset-react": "^7.13.13"
+  }
+}
