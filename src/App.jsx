@@ -58,8 +58,8 @@ class IssueTable extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    <IssueRow issue_id="1" issue_title="Title of the first issue" />
-                    <IssueRow issue_id="2" issue_title="Title of the second issue" />
+                <IssueRow issue_id="1" >This issue 1 was rendered using Children Properties</IssueRow>
+                <IssueRow issue_id="2" >This issue 2 was rendered using Children Properties</IssueRow>
                 </tbody>
             </table>
         );
@@ -69,6 +69,8 @@ class IssueTable extends React.Component {
 
 /*
 Notice how the data passed to IssueRow in the IssueTable component has been used inside the `render()` method.
+`this.props.children` refers to the child elements nested inside the react component. For this instance, it is just
+a simple string, but can be a complex component too.
  */
 
 class IssueRow extends React.Component {
@@ -77,7 +79,7 @@ class IssueRow extends React.Component {
         return (
             <tr>
                 <td>{this.props.issue_id}</td>
-                <td>{this.props.issue_title}</td>
+                <td>{this.props.children}</td>
             </tr>
         );
     }

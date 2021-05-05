@@ -43,23 +43,23 @@ Notice how IssueRow has some data passed to it.
 class IssueTable extends React.Component {
   render() {
     return /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "ID"), /*#__PURE__*/React.createElement("th", null, "Title"))), /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement(IssueRow, {
-      issue_id: "1",
-      issue_title: "Title of the first issue"
-    }), /*#__PURE__*/React.createElement(IssueRow, {
-      issue_id: "2",
-      issue_title: "Title of the second issue"
-    })));
+      issue_id: "1"
+    }, "This issue 1 was rendered using Children Properties"), /*#__PURE__*/React.createElement(IssueRow, {
+      issue_id: "2"
+    }, "This issue 2 was rendered using Children Properties")));
   }
 
 }
 /*
 Notice how the data passed to IssueRow in the IssueTable component has been used inside the `render()` method.
+`this.props.children` refers to the child elements nested inside the react component. For this instance, it is just
+a simple string, but can be a complex component too.
  */
 
 
 class IssueRow extends React.Component {
   render() {
-    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, this.props.issue_id), /*#__PURE__*/React.createElement("td", null, this.props.issue_title));
+    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, this.props.issue_id), /*#__PURE__*/React.createElement("td", null, this.props.children));
   }
 
 }
