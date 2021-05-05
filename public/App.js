@@ -18,6 +18,65 @@ class HelloWorld extends React.Component {
   }
 
 }
+/*
+From this point forward we're making a simple Issue Tracker with React. The tracker will have the ability to add issues,
+list them, and filter them. In the following lines we have defined different React Components:
+- Issue Filter
+- Issue Table
+- Issue Row
+- Issue Add
+- Issue List -- which is a composition of the above components
+ */
 
-var element = /*#__PURE__*/React.createElement(HelloWorld, null);
+
+class IssueFilter extends React.Component {
+  render() {
+    return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for IssueFilter component");
+  }
+
+}
+/*
+Notice how IssueRow has some data passed to it.
+ */
+
+
+class IssueTable extends React.Component {
+  render() {
+    return /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "ID"), /*#__PURE__*/React.createElement("th", null, "Title"))), /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement(IssueRow, {
+      issue_id: "1",
+      issue_title: "Title of the first issue"
+    }), /*#__PURE__*/React.createElement(IssueRow, {
+      issue_id: "2",
+      issue_title: "Title of the second issue"
+    })));
+  }
+
+}
+/*
+Notice how the data passed to IssueRow in the IssueTable component has been used inside the `render()` method.
+ */
+
+
+class IssueRow extends React.Component {
+  render() {
+    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, this.props.issue_id), /*#__PURE__*/React.createElement("td", null, this.props.issue_title));
+  }
+
+}
+
+class IssueAdd extends React.Component {
+  render() {
+    return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the IssueAdd component");
+  }
+
+}
+
+class IssueList extends React.Component {
+  render() {
+    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Issue Tracker"), /*#__PURE__*/React.createElement(IssueFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueAdd, null));
+  }
+
+}
+
+var element = /*#__PURE__*/React.createElement(IssueList, null);
 ReactDOM.render(element, document.getElementById('content'));
