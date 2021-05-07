@@ -23,6 +23,31 @@ class HelloWorld extends React.Component {
 }
 
 /*
+This is the list of issues we will use for dynamic composition
+ */
+
+const issues = [
+    {
+        id: 1,
+        status: 'New',
+        owner: 'Rajat',
+        effort: 5,
+        created: new Date('2021-05-07'),
+        due: undefined,
+        title: 'Error in console when clicking Add'
+    },
+    {
+        id: 2,
+        status: 'Assigned',
+        owner: 'Sudhan',
+        effort: 14,
+        created: new Date('2021-05-01'),
+        due: new Date('2021-05-24'),
+        title: 'Missing bottom border on panel'
+    }
+]
+
+/*
 From this point forward we're making a simple Issue Tracker with React. The tracker will have the ability to add issues,
 list them, and filter them. In the following lines we have defined different React Components:
 - Issue Filter
@@ -49,17 +74,23 @@ Notice how IssueRow has some data passed to it.
 class IssueTable extends React.Component {
 
     render() {
+        const issueRows = issues.map(issue => <IssueRow key={issue.id} issue={issue}/>);
+
         return (
-            <table>
+            <table className="bordered-table">
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Status</th>
+                        <th>Owner</th>
+                        <th>Effort</th>
+                        <th>Created</th>
+                        <th>Due</th>
                         <th>Title</th>
                     </tr>
                 </thead>
                 <tbody>
-                <IssueRow issue_id="1" >This issue 1 was rendered using Children Properties</IssueRow>
-                <IssueRow issue_id="2" >This issue 2 was rendered using Children Properties</IssueRow>
+                {issueRows}
                 </tbody>
             </table>
         );
@@ -76,10 +107,16 @@ a simple string, but can be a complex component too.
 class IssueRow extends React.Component {
 
     render() {
+        const issue = this.props.issue;
         return (
             <tr>
-                <td>{this.props.issue_id}</td>
-                <td>{this.props.children}</td>
+                <td>{issue.id}</td>
+                <td>{issue.status}</td>
+                <td>{issue.owner}</td>
+                <td>{issue.effort}</td>
+                <td>{issue.created ? issue.created.toDateString() : ''}</td>
+                <td>{issue.due ? issue.due.toDateString() : ''}</td>
+                <td>{issue.title}</td>
             </tr>
         );
     }

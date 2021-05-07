@@ -19,6 +19,28 @@ class HelloWorld extends React.Component {
 
 }
 /*
+This is the list of issues we will use for dynamic composition
+ */
+
+
+var issues = [{
+  id: 1,
+  status: 'New',
+  owner: 'Rajat',
+  effort: 5,
+  created: new Date('2021-05-07'),
+  due: undefined,
+  title: 'Error in console when clicking Add'
+}, {
+  id: 2,
+  status: 'Assigned',
+  owner: 'Sudhan',
+  effort: 14,
+  created: new Date('2021-05-01'),
+  due: new Date('2021-05-24'),
+  title: 'Missing bottom border on panel'
+}];
+/*
 From this point forward we're making a simple Issue Tracker with React. The tracker will have the ability to add issues,
 list them, and filter them. In the following lines we have defined different React Components:
 - Issue Filter
@@ -27,7 +49,6 @@ list them, and filter them. In the following lines we have defined different Rea
 - Issue Add
 - Issue List -- which is a composition of the above components
  */
-
 
 class IssueFilter extends React.Component {
   render() {
@@ -42,11 +63,13 @@ Notice how IssueRow has some data passed to it.
 
 class IssueTable extends React.Component {
   render() {
-    return /*#__PURE__*/React.createElement("table", null, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "ID"), /*#__PURE__*/React.createElement("th", null, "Title"))), /*#__PURE__*/React.createElement("tbody", null, /*#__PURE__*/React.createElement(IssueRow, {
-      issue_id: "1"
-    }, "This issue 1 was rendered using Children Properties"), /*#__PURE__*/React.createElement(IssueRow, {
-      issue_id: "2"
-    }, "This issue 2 was rendered using Children Properties")));
+    var issueRows = issues.map(issue => /*#__PURE__*/React.createElement(IssueRow, {
+      key: issue.id,
+      issue: issue
+    }));
+    return /*#__PURE__*/React.createElement("table", {
+      className: "bordered-table"
+    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "ID"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Owner"), /*#__PURE__*/React.createElement("th", null, "Effort"), /*#__PURE__*/React.createElement("th", null, "Created"), /*#__PURE__*/React.createElement("th", null, "Due"), /*#__PURE__*/React.createElement("th", null, "Title"))), /*#__PURE__*/React.createElement("tbody", null, issueRows));
   }
 
 }
@@ -59,7 +82,8 @@ a simple string, but can be a complex component too.
 
 class IssueRow extends React.Component {
   render() {
-    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, this.props.issue_id), /*#__PURE__*/React.createElement("td", null, this.props.children));
+    var issue = this.props.issue;
+    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, issue.id), /*#__PURE__*/React.createElement("td", null, issue.status), /*#__PURE__*/React.createElement("td", null, issue.owner), /*#__PURE__*/React.createElement("td", null, issue.effort), /*#__PURE__*/React.createElement("td", null, issue.created ? issue.created.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.due ? issue.due.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.title));
   }
 
 }
