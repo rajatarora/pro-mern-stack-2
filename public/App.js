@@ -72,8 +72,28 @@ class IssueTable extends React.Component {
   constructor() {
     super();
     this.state = {
-      issues: initialIssues
+      issues: []
     };
+  }
+  /*
+  This method is simply emulating an api call at the moment.
+   */
+
+
+  loadData() {
+    setTimeout(() => {
+      this.setState({
+        issues: initialIssues
+      });
+    }, 1000);
+  }
+  /*
+  This is one of React's lifecycle methods.
+   */
+
+
+  componentDidMount() {
+    this.loadData();
   }
 
   render() {
