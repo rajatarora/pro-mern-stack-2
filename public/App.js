@@ -98,13 +98,41 @@ class IssueRow extends React.Component {
 class IssueAdd extends React.Component {
   constructor() {
     super();
-    setTimeout(() => {
-      this.props.createIssue(sampleIssue);
-    }, 2500);
+    /*
+    This binding is to be done because `this` will be set to the object generating the event, typically the
+    `window` object.
+     */
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   render() {
-    return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the IssueAdd component");
+    return /*#__PURE__*/React.createElement("form", {
+      name: "issueAdd",
+      onSubmit: this.handleSubmit
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "owner",
+      placeholder: "Owner"
+    }), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "title",
+      placeholder: "title"
+    }), /*#__PURE__*/React.createElement("button", null, "Add"));
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    var form = document.forms.issueAdd;
+    var issue = {
+      owner: form.owner.value,
+      title: form.title.value,
+      status: 'New'
+    };
+    console.log(issue);
+    this.props.createIssue(issue);
+    form.owner.value = "";
+    form.title.value = "";
   }
 
 }
@@ -141,7 +169,7 @@ class IssueList extends React.Component {
       this.setState({
         issues: initialIssues
       });
-    }, 1000);
+    }, 500);
   }
   /*
   This method is modifying the existing state of the component. Note how the state variable is updated:

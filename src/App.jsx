@@ -135,15 +135,36 @@ class IssueAdd extends React.Component {
 
     constructor() {
         super();
-        setTimeout(() => {
-            this.props.createIssue(sampleIssue);
-        }, 2500)
+
+        /*
+        This binding is to be done because `this` will be set to the object generating the event, typically the
+        `window` object.
+         */
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     render() {
         return (
-            <div>This is a placeholder for the IssueAdd component</div>
+            <form name="issueAdd" onSubmit={this.handleSubmit}>
+                <input type="text" name="owner" placeholder="Owner" />
+                <input type="text" name="title" placeholder="title" />
+                <button>Add</button>
+            </form>
         );
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const form = document.forms.issueAdd;
+        const issue = {
+            owner: form.owner.value,
+            title: form.title.value,
+            status: 'New'
+        };
+        console.log(issue);
+        this.props.createIssue(issue);
+        form.owner.value = "";
+        form.title.value = "";
     }
 
 }
@@ -180,7 +201,7 @@ class IssueList extends React.Component {
     loadData() {
         setTimeout(() => {
             this.setState({ issues: initialIssues });
-        }, 1000)
+        }, 500)
     }
 
     /*
