@@ -76,59 +76,54 @@ class IssueFilter extends React.Component {
 
 /*
 Notice how IssueRow has some data passed to it.
+
+Later tag: as IssueTable is a stateless component, it can be implemented using a function
  */
 
-class IssueTable extends React.Component {
+function IssueTable(props) {
+    const issueRows = props.issues.map(issue => <IssueRow key={issue.id} issue={issue}/>);
 
-    render() {
-        console.log("Inside Render()");
-        const issueRows = this.props.issues.map(issue => <IssueRow key={issue.id} issue={issue}/>);
-
-        return (
-            <table className="bordered-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Status</th>
-                        <th>Owner</th>
-                        <th>Effort</th>
-                        <th>Created</th>
-                        <th>Due</th>
-                        <th>Title</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {issueRows}
-                </tbody>
-            </table>
-        );
-    }
-
+    return (
+        <table className="bordered-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Owner</th>
+                <th>Effort</th>
+                <th>Created</th>
+                <th>Due</th>
+                <th>Title</th>
+            </tr>
+            </thead>
+            <tbody>
+            {issueRows}
+            </tbody>
+        </table>
+    );
 }
 
 /*
 Notice how the data passed to IssueRow in the IssueTable component has been used inside the `render()` method.
 `this.props.children` refers to the child elements nested inside the react component. For this instance, it is just
 a simple string, but can be a complex component too.
+
+Later tag: IssueRow is a stateless component, so it can be modified to fit a function instead of a class
  */
 
-class IssueRow extends React.Component {
-
-    render() {
-        const issue = this.props.issue;
-        return (
-            <tr>
-                <td>{issue.id}</td>
-                <td>{issue.status}</td>
-                <td>{issue.owner}</td>
-                <td>{issue.effort}</td>
-                <td>{issue.created ? issue.created.toDateString() : ''}</td>
-                <td>{issue.due ? issue.due.toDateString() : ''}</td>
-                <td>{issue.title}</td>
-            </tr>
-        );
-    }
-
+function IssueRow(props) {
+    const issue = props.issue;
+    return (
+        <tr>
+            <td>{issue.id}</td>
+            <td>{issue.status}</td>
+            <td>{issue.owner}</td>
+            <td>{issue.effort}</td>
+            <td>{issue.created ? issue.created.toDateString() : ''}</td>
+            <td>{issue.due ? issue.due.toDateString() : ''}</td>
+            <td>{issue.title}</td>
+        </tr>
+    );
 }
 
 class IssueAdd extends React.Component {
