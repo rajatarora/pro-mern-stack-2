@@ -40,6 +40,12 @@ var initialIssues = [{
   due: new Date('2021-05-24'),
   title: 'Missing bottom border on panel'
 }];
+var sampleIssue = {
+  status: 'New',
+  owner: 'Ashik',
+  effort: 6,
+  title: 'Completion date should be optional'
+};
 /*
 From this point forward we're making a simple Issue Tracker with React. The tracker will have the ability to add issues,
 list them, and filter them. In the following lines we have defined different React Components:
@@ -74,6 +80,12 @@ class IssueTable extends React.Component {
     this.state = {
       issues: []
     };
+    setTimeout(() => {
+      this.createIssue(sampleIssue);
+    }, 2500);
+    setTimeout(() => {
+      this.createIssue(sampleIssue);
+    }, 3500);
   }
   /*
   This method is simply emulating an api call at the moment.
@@ -88,6 +100,30 @@ class IssueTable extends React.Component {
     }, 1000);
   }
   /*
+  This method is modifying the existing state of the component. Note how the state variable is updated:
+  - Create a shallow copy of this.state.issues
+  - Add the newly created issue into the shallow copy
+  - Call this.setState with the shallow copy as input
+    You can't do this.state.issues.push() directly because issues is a plain JS variable. A React component's state
+  should always be treated as immutable. Right now creating a shallow copy works. But for more complex states, consider
+  using immutable.js (https://facebook.github.io/immutable-js/)
+   */
+
+
+  createIssue(issue) {
+    /*
+    Object.assign is a way to copy objects in JS.
+     */
+    var newIssue = Object.assign({}, issue);
+    newIssue.id = this.state.issues.length + 1;
+    newIssue.created = new Date();
+    var newIssueList = this.state.issues.slice();
+    newIssueList.push(newIssue);
+    this.setState({
+      issues: newIssueList
+    });
+  }
+  /*
   This is one of React's lifecycle methods.
    */
 
@@ -97,6 +133,7 @@ class IssueTable extends React.Component {
   }
 
   render() {
+    console.log("Inside Render()");
     var issueRows = this.state.issues.map(issue => /*#__PURE__*/React.createElement(IssueRow, {
       key: issue.id,
       issue: issue
