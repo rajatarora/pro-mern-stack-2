@@ -23,7 +23,7 @@ This is the list of issues we will use for dynamic composition
  */
 
 
-var issues = [{
+var initialIssues = [{
   id: 1,
   status: 'New',
   owner: 'Rajat',
@@ -62,8 +62,22 @@ Notice how IssueRow has some data passed to it.
 
 
 class IssueTable extends React.Component {
+  /*
+  The constructor of this component is setting the initial state of issues, equal to the `initialIssues` array
+  defined above, and the render method is in turn reading the issue list from the state variable.
+    The component will be redrawn if the state changes.
+    The state can only be assigned value in the constructor of a component. After that, the state can be modified using
+  this.setState() method, which takes the state object as a param.
+   */
+  constructor() {
+    super();
+    this.state = {
+      issues: initialIssues
+    };
+  }
+
   render() {
-    var issueRows = issues.map(issue => /*#__PURE__*/React.createElement(IssueRow, {
+    var issueRows = this.state.issues.map(issue => /*#__PURE__*/React.createElement(IssueRow, {
       key: issue.id,
       issue: issue
     }));
