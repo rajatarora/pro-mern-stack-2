@@ -80,70 +80,9 @@ Notice how IssueRow has some data passed to it.
 
 class IssueTable extends React.Component {
 
-    /*
-    The constructor of this component is setting the initial state of issues, equal to the `initialIssues` array
-    defined above, and the render method is in turn reading the issue list from the state variable.
-
-    The component will be redrawn if the state changes.
-
-    The state can only be assigned value in the constructor of a component. After that, the state can be modified using
-    this.setState() method, which takes the state object as a param.
-     */
-    constructor() {
-        super();
-        this.state = {
-            issues: []
-        }
-        setTimeout(() => {
-            this.createIssue(sampleIssue);
-        }, 2500);
-        setTimeout(() => {
-            this.createIssue(sampleIssue);
-        }, 3500);
-    }
-
-    /*
-    This method is simply emulating an api call at the moment.
-     */
-    loadData() {
-        setTimeout(() => {
-            this.setState({ issues: initialIssues });
-        }, 1000)
-    }
-
-    /*
-    This method is modifying the existing state of the component. Note how the state variable is updated:
-    - Create a shallow copy of this.state.issues
-    - Add the newly created issue into the shallow copy
-    - Call this.setState with the shallow copy as input
-
-    You can't do this.state.issues.push() directly because issues is a plain JS variable. A React component's state
-    should always be treated as immutable. Right now creating a shallow copy works. But for more complex states, consider
-    using immutable.js (https://facebook.github.io/immutable-js/)
-     */
-    createIssue(issue) {
-
-        /*
-        Object.assign is a way to copy objects in JS.
-         */
-        const newIssue = Object.assign({}, issue);
-        newIssue.id = this.state.issues.length + 1;
-        newIssue.created = new Date();
-        const newIssueList = this.state.issues.slice();
-        newIssueList.push(newIssue);
-        this.setState({ issues: newIssueList });
-    }
-
-    /*
-    This is one of React's lifecycle methods.
-     */
-    componentDidMount() {
-        this.loadData();
-    }
-
     render() {
         console.log("Inside Render()");
-        const issueRows = this.state.issues.map(issue => <IssueRow key={issue.id} issue={issue}/>);
+        const issueRows = this.props.issues.map(issue => <IssueRow key={issue.id} issue={issue}/>);
 
         return (
             <table className="bordered-table">
@@ -194,6 +133,13 @@ class IssueRow extends React.Component {
 
 class IssueAdd extends React.Component {
 
+    constructor() {
+        super();
+        setTimeout(() => {
+            this.props.createIssue(sampleIssue);
+        }, 2500)
+    }
+
     render() {
         return (
             <div>This is a placeholder for the IssueAdd component</div>
@@ -204,15 +150,78 @@ class IssueAdd extends React.Component {
 
 class IssueList extends React.Component {
 
+    /*
+    The constructor of this component is setting the initial state of issues, equal to the `initialIssues` array
+    defined above, and the render method is in turn reading the issue list from the state variable.
+
+    The component will be redrawn if the state changes.
+
+    The state can only be assigned value in the constructor of a component. After that, the state can be modified using
+    this.setState() method, which takes the state object as a param.
+     */
+    constructor() {
+        super();
+        this.state = {
+            issues: []
+        }
+
+        /*
+        The binding is to be done because:
+        - createIssue, defined in IssueList, is called from IssueAdd
+        - If binding is not done, `this` will refer to IssueAdd component, where `this.state.issues` will be undefined,
+          which is accessed inside createIssue method.
+         */
+        this.createIssue = this.createIssue.bind(this);
+    }
+
+    /*
+    This method is simply emulating an api call at the moment.
+     */
+    loadData() {
+        setTimeout(() => {
+            this.setState({ issues: initialIssues });
+        }, 1000)
+    }
+
+    /*
+    This method is modifying the existing state of the component. Note how the state variable is updated:
+    - Create a shallow copy of this.state.issues
+    - Add the newly created issue into the shallow copy
+    - Call this.setState with the shallow copy as input
+
+    You can't do this.state.issues.push() directly because issues is a plain JS variable. A React component's state
+    should always be treated as immutable. Right now creating a shallow copy works. But for more complex states, consider
+    using immutable.js (https://facebook.github.io/immutable-js/)
+     */
+    createIssue(issue) {
+
+        /*
+        Object.assign is a way to copy objects in JS.
+         */
+        const newIssue = Object.assign({}, issue);
+        newIssue.id = this.state.issues.length + 1;
+        newIssue.created = new Date();
+        const newIssueList = this.state.issues.slice();
+        newIssueList.push(newIssue);
+        this.setState({ issues: newIssueList });
+    }
+
+    /*
+    This is one of React's lifecycle methods.
+     */
+    componentDidMount() {
+        this.loadData();
+    }
+
     render() {
         return (
             <React.Fragment>
                 <h1>Issue Tracker</h1>
                 <IssueFilter />
                 <hr />
-                <IssueTable />
+                <IssueTable issues={this.state.issues} />
                 <hr />
-                <IssueAdd />
+                <IssueAdd createIssue={this.createIssue} />
             </React.Fragment>
         );
     }

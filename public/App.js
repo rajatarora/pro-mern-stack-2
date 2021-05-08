@@ -68,6 +68,48 @@ Notice how IssueRow has some data passed to it.
 
 
 class IssueTable extends React.Component {
+  render() {
+    console.log("Inside Render()");
+    var issueRows = this.props.issues.map(issue => /*#__PURE__*/React.createElement(IssueRow, {
+      key: issue.id,
+      issue: issue
+    }));
+    return /*#__PURE__*/React.createElement("table", {
+      className: "bordered-table"
+    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "ID"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Owner"), /*#__PURE__*/React.createElement("th", null, "Effort"), /*#__PURE__*/React.createElement("th", null, "Created"), /*#__PURE__*/React.createElement("th", null, "Due"), /*#__PURE__*/React.createElement("th", null, "Title"))), /*#__PURE__*/React.createElement("tbody", null, issueRows));
+  }
+
+}
+/*
+Notice how the data passed to IssueRow in the IssueTable component has been used inside the `render()` method.
+`this.props.children` refers to the child elements nested inside the react component. For this instance, it is just
+a simple string, but can be a complex component too.
+ */
+
+
+class IssueRow extends React.Component {
+  render() {
+    var issue = this.props.issue;
+    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, issue.id), /*#__PURE__*/React.createElement("td", null, issue.status), /*#__PURE__*/React.createElement("td", null, issue.owner), /*#__PURE__*/React.createElement("td", null, issue.effort), /*#__PURE__*/React.createElement("td", null, issue.created ? issue.created.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.due ? issue.due.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.title));
+  }
+
+}
+
+class IssueAdd extends React.Component {
+  constructor() {
+    super();
+    setTimeout(() => {
+      this.props.createIssue(sampleIssue);
+    }, 2500);
+  }
+
+  render() {
+    return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the IssueAdd component");
+  }
+
+}
+
+class IssueList extends React.Component {
   /*
   The constructor of this component is setting the initial state of issues, equal to the `initialIssues` array
   defined above, and the render method is in turn reading the issue list from the state variable.
@@ -80,12 +122,14 @@ class IssueTable extends React.Component {
     this.state = {
       issues: []
     };
-    setTimeout(() => {
-      this.createIssue(sampleIssue);
-    }, 2500);
-    setTimeout(() => {
-      this.createIssue(sampleIssue);
-    }, 3500);
+    /*
+    The binding is to be done because:
+    - createIssue, defined in IssueList, is called from IssueAdd
+    - If binding is not done, `this` will refer to IssueAdd component, where `this.state.issues` will be undefined,
+      which is accessed inside createIssue method.
+     */
+
+    this.createIssue = this.createIssue.bind(this);
   }
   /*
   This method is simply emulating an api call at the moment.
@@ -133,42 +177,11 @@ class IssueTable extends React.Component {
   }
 
   render() {
-    console.log("Inside Render()");
-    var issueRows = this.state.issues.map(issue => /*#__PURE__*/React.createElement(IssueRow, {
-      key: issue.id,
-      issue: issue
+    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Issue Tracker"), /*#__PURE__*/React.createElement(IssueFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, {
+      issues: this.state.issues
+    }), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueAdd, {
+      createIssue: this.createIssue
     }));
-    return /*#__PURE__*/React.createElement("table", {
-      className: "bordered-table"
-    }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "ID"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Owner"), /*#__PURE__*/React.createElement("th", null, "Effort"), /*#__PURE__*/React.createElement("th", null, "Created"), /*#__PURE__*/React.createElement("th", null, "Due"), /*#__PURE__*/React.createElement("th", null, "Title"))), /*#__PURE__*/React.createElement("tbody", null, issueRows));
-  }
-
-}
-/*
-Notice how the data passed to IssueRow in the IssueTable component has been used inside the `render()` method.
-`this.props.children` refers to the child elements nested inside the react component. For this instance, it is just
-a simple string, but can be a complex component too.
- */
-
-
-class IssueRow extends React.Component {
-  render() {
-    var issue = this.props.issue;
-    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, issue.id), /*#__PURE__*/React.createElement("td", null, issue.status), /*#__PURE__*/React.createElement("td", null, issue.owner), /*#__PURE__*/React.createElement("td", null, issue.effort), /*#__PURE__*/React.createElement("td", null, issue.created ? issue.created.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.due ? issue.due.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.title));
-  }
-
-}
-
-class IssueAdd extends React.Component {
-  render() {
-    return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the IssueAdd component");
-  }
-
-}
-
-class IssueList extends React.Component {
-  render() {
-    return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Issue Tracker"), /*#__PURE__*/React.createElement(IssueFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueAdd, null));
   }
 
 }
